@@ -1,0 +1,18 @@
+
+###Create User###
+
+#Create TableSpace
+> CREATE TABLESPACE t1 DATAFILE 't1.dbf' SIZE 10M
+   EXTENT MANAGEMENT LOCAL UNIFORM SIZE 256K;
+
+#Create User    
+> CREATE USER u1 IDENTIFIED BY 'p1' 
+   DEFAULT TABLESPACE t1
+ 
+#Add FILE 'f1' to TableSpace
+>ALTER TABLESPACE t1 ADD DATAFILE 'f1.dbf' SIZE 20M;
+
+#Extends TableSpace
+> ALTER DATABASE DATAFILE ’f1.dbf’ RESIZE 100M;      10 -> 100
+   
+   
