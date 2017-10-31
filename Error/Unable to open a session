@@ -1,0 +1,11 @@
+
+## JDBC-12003:Unable to open a session.
+
+# tbAdmin -> Session manager Check
+
+$ vi $TB_HOME/config/$TB_SID.tip
+  adjust 'MAX_SESSION_COUNT'
+
+$ ../bin/tbdown
+$ ../bin/tbboot
+
