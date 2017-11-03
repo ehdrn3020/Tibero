@@ -13,6 +13,10 @@ DATAFILE '/usr/tibero/dbf/my_file.dbf' SIZE 50M
 >ALTER DATABASE DATAFILE ’my_file01.dbf’ RESIZE 100M;
 
 
+#Alter Tablespace Name
+>ALTER TABLESPACE oldname RENAME TO newname;
+
+
 #Delete Tablespace
 >DROP TABLESPACE my_space;
 >DROP TABLESPACE my_space INCLUDING CONTENTS AND DATAFILES;
