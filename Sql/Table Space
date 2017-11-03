@@ -1,0 +1,37 @@
+
+# Create TableSpace
+>CREATE TABLESPACE my_space                                   
+DATAFILE '/usr/tibero/dbf/my_file.dbf' SIZE 50M             
+  EXTENT MANAGEMENT LOCAL UNIFORM SIZE 256K;
+
+
+#Add new data file to Tablespace
+>ALTER TABLESPACE my_space ADD DATAFILE 'my_file02.dbf' SIZE 20M;
+
+
+#Alter Tablespace Size
+>ALTER DATABASE DATAFILE ’my_file01.dbf’ RESIZE 100M;
+
+
+#Delete Tablespace
+>DROP TABLESPACE my_space;
+>DROP TABLESPACE my_space INCLUDING CONTENTS AND DATAFILES;
+
+
+#Select Tablespace
+Tibero RDBMS에서는 테이블스페이스를 효율적으로 관리하기 위해 
+뷰(정적 뷰, 동적 뷰 포함)를 통해 테이블스페이스의 정보를 제공하고 있다.
+
+테이블스페이스 내의 익스텐트의 크기 및 개수, 할당된 서버, 포함된 데이터 파일의 이름 및 크기, 세그먼트의 이름 및 종류, 크기 등의 정보를 제공한다.
+
+뷰	설명
+DBA_TABLESPACES	      Tibero RDBMS 내의 모든 테이블스페이스의 정보를 조회하는 뷰이다.
+USER_TABLESPACES	    현재 사용자에 속한 테이블스페이스의 정보를 조회하는 뷰이다.
+V$TABLESPACE	          Tibero RDBMS 내의 모든 테이블스페이스에 대한 간략한 정보를 조회하는 뷰이다.
+
+
+
+
+#Ref:   http://www.gurubee.net/lecture/2077
+
+
