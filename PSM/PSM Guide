@@ -1,0 +1,46 @@
+###선언###
+
+#다음은 변수를 선언하는 예이다.
+id NUMBER;
+productname VARCHAR2(20) := 'Tibero';
+gravity := 9.8;
+force := mass * acceleration;
+grade := calculate_the_grade('Darwin');
+
+#다음은 상수를 선언하고 특정 값을 할당하는 예이다.
+PI CONSTANT NUMBER := 3.141592;
+
+
+###제어구조###
+
+#다음은 IF 문의 예이다.
+DECLARE
+   evaluation_score NUMBER; 
+BEGIN
+  SELECT bonus into evaluation_score FROM employee WHERE emp_no = 19963077; 
+  IF evaluation_score > 80 THEN
+    DBMS_OUTPUT.PUT_LINE('This person gets a salary bonus.');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('This person does not get a salary bonus.'); 
+  END IF;
+END;
+
+
+###서브프로그램###
+
+#다음은 서브 프로그램을 작성한 예이다.
+#서브프로그램은 반환 값이 없는 프로시저와 반환 값이 있는 함수로 구분된다.
+CREATE [OR REPLACE] PROCEDURE check_sal(name VARCHAR2) IS 
+  sal NUMBER; 
+  invalid_id exception; 
+BEGIN
+  SELECT registered_num INTO sal FROM emp WHERE emp_name = name; 
+  IF sal < 7000 THEN
+    raise invalid_sal; 
+  END IF; 
+    DBMS_OUTPUT.PUT_LINE('Correct'); 
+EXCEPTION
+  WHEN invalid_id THEN
+    DBMS_OUTPUT.PUT_LINE('Invalid registration number');
+END;
+
