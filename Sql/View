@@ -1,0 +1,7 @@
+
+CREATE VIEW V_name AS
+SELECT 
+count(DCM_ID) AS "ID count",
+count(DCM_SET_ID) AS "set count"
+FROM STR.FILE_DATA
+
