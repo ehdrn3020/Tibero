@@ -36,16 +36,20 @@ V$TABLESPACE	          Tibero RDBMS 내의 모든 테이블스페이스에 대�
 #Ref:   http://www.gurubee.net/lecture/2077
 
 
+
 #Alter Datafile Name
-1)ALTER tablespace TS_CAS_APPLY_INFO offline;
+1)  >ALTER tablespace TS_CAS_APPLY_INFO offline;
 
-2)ALTER tablespace TS_CAS_APPLY_INFO
-  RENAME datafile
-  '/home/ubuntu1/Tibero/tibero5/database/tibero/hira_tbl_sp.dbf'
-  TO 
-  '/home/ubuntu1/Tibero/tibero5/database/tibero/F_CAS_APPLY_INFO.dbf';
+2)  $ cd/$TB_HOME/database/$TB_SID/
+     $ mv old_datafile_name new_datafile_name
+    
+3)  >ALTER tablespace TS_CAS_APPLY_INFO
+     RENAME datafile
+    '/home/ubuntu1/Tibero/tibero5/database/tibero/hira_tbl_sp.dbf'
+     TO 
+    '/home/ubuntu1/Tibero/tibero5/database/tibero/F_CAS_APPLY_INFO.dbf';
 
-3)alter tablespace TS_CAS_APPLY_INFO online;
+4)  >alter tablespace TS_CAS_APPLY_INFO online;
 
 
 
