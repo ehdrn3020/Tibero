@@ -33,9 +33,19 @@ DBA_TABLESPACES	      Tibero RDBMS 내의 모든 테이블스페이스의 정보
 USER_TABLESPACES	    현재 사용자에 속한 테이블스페이스의 정보를 조회하는 뷰이다.
 V$TABLESPACE	          Tibero RDBMS 내의 모든 테이블스페이스에 대한 간략한 정보를 조회하는 뷰이다.
 
-
-
-
 #Ref:   http://www.gurubee.net/lecture/2077
+
+
+#Alter Datafile Name
+1)ALTER tablespace TS_CAS_APPLY_INFO offline;
+
+2)ALTER tablespace TS_CAS_APPLY_INFO
+  RENAME datafile
+  '/home/ubuntu1/Tibero/tibero5/database/tibero/hira_tbl_sp.dbf'
+  TO 
+  '/home/ubuntu1/Tibero/tibero5/database/tibero/F_CAS_APPLY_INFO.dbf';
+
+3)alter tablespace TS_CAS_APPLY_INFO online;
+
 
 
