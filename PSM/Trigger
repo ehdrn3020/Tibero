@@ -1,0 +1,9 @@
+create or replace trigger HIRA.TR_CAS_CHECK_UT
+BEFORE insert or update on HIRA.tb_cas_apply_info
+for each row
+when (new.APL_NO = old.APL_NO)
+BEGIN 
+	UPDATE HIRA.tb_cas_apply_info
+		SET AC_TM = (:new.AC_TM + AC_TM);
+END;
+
