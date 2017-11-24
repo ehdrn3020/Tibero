@@ -1,0 +1,16 @@
+###Delete PK### 
+- ALTER TABLE EMP_TAB DROP PRIMARY KEY; 
+
+###Alter PK###
+- ALTER TABLE   EMP_TAB  ADD PRIMARY KEY (Field1, Field2, Field3); 
+- ALTER TABLE   EMP_TAB  ADD CONSTRAINT EMP_PK(PK이름)  PRIMARY KEY (Field1, Field2, Field3); 
+
+###Delete FK### 
+- ALTER TABLE EMP1 DROP CONSTRAINT EMP1_FK; 
+
+###Alter FK###
+- ALTER TABLE EMP1 ADD CONSTRAINT EMP1_FK(FK NAME) FOREIGN KEY(Field1, Field2, Field3) 
+  REFERENCES EMP2(Field1, Field2, Field3);
+  
+  
+  
