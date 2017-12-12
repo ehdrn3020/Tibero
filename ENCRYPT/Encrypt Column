@@ -1,0 +1,135 @@
+### 보안지갑 생성 ###
+$ tbwallet_gen
+[ Tibero Security Wallet Generator ] 
+Enter wallet file name: TBWALLET 
+Enter wallet password: tibero 
+generate wallet success
+
+# 수행한 위치에 보안지갑 생성 확인 
+$ ls -lt
+-rw-r--r--  1 tibero5 dba 177 Jul 29 09:33 TBWALLET
+
+# 생성한 Wallet file 경로 설정
+$ cd $TB_HOME/config/tibero.tip (환경설정파일)
+-------------------------------------------------------------------------- 
+ RDBMS initialization parameter
+--------------------------------------------------------------------------
+B_NAME=tibero 
+LISTENER_PORT=8629 
+CONTROL_FILES="/home/tibero5/database/tibero5/c1.ctl" 
+#CERTIFICATE_FILE="/home/tibero5/config/svr_wallet/tb5.crt" 
+#PRIVKEY_FILE="/home/tibero5/config/svr_wallet/tb5.key" 
+WALLET_FILE="/home/tibero5/TBWALLET"
+MAX_SESSION_COUNT=20
+TOTAL_SHM_SIZE=512M 
+MEMORY_TARGET=1G
+_USGMT_UNIFORM_EXTSIZE=1024 
+--------------------------------------------------------------------------
+
+# DB 재기동 
+$ tbdown
+$ tbboot
+
+# 보안지갑 사용 
+$ tbsql sys/tibero 
+SQL> alter system set encryption wallet open identified by "tibero"; 
+System altered.
+
+# 보안 지갑 닫기 
+SQL> alter system set encryption wallet close; 
+System altered.
+
+
+
+
+###암호화 컬럼이 있는 Table 생성###
+
+# Sample DATA 생성
+SQL> CREATE TABLE TDE_TABLE ( 
+ID NUMBER , 
+NAME VARCHAR(20) ENCRYPT, 
+DAY DATE ENCRYPT 
+);
+Table 'TDE_TABLE' created.
+
+SQL> insert into TDE_TABLE values (1, 'TIBERO' , '2003/05/30'); 
+1 row inserted.
+
+SQL> insert into TDE_TABLE values (2, 'TMAXDATA' , '2014/06/02' ); 
+1 row inserted.
+
+SQL> commit; 
+Commit completed.
+
+
+# 암호화 컬럼 확인 
+SQL> select * from USER_ENCRYPTED_COLUMNS where table_name ='TDE_TABLE';
+TABLE_NAME COLUMN_NAME ENCRYPTION_ALG SALT
+---------- ------------------------ ----------------------------- ---- 
+TDE_TABLE NAME     AES 192 bits key YES 
+TDE_TABLE DAY   AES 192 bits key YES
+2 rows selected.
+
+
+# 암호화되지 않는 기존 컬럼 암호화
+SQL> alter table TDE_TABLE modify (ID ENCRYPT); 
+Table 'TDE_TABLE' altered.
+
+SQL> select * from USER_ENCRYPTED_COLUMNS where table_name ='TDE_TABLE';
+TABLE_NAME COLUMN_NAME ENCRYPTION_ALG SALT
+---------- ------------------------ ----------------------------- ---- 
+TDE_TABLE ID AES 192 bits key YES 
+TDE_TABLE NAME AES 192 bits key YES 
+TDE_TABLE DAY AES 192 bits key YES
+3 rows selected.
+
+
+# 암호화 기능 비활성화 
+SQL> alter table TDE_TABLE modify( name DECRYPT ); 
+Table 'TDE_TABLE' altered.
+
+SQL> select * from USER_ENCRYPTED_COLUMNS where table_name ='TDE_TABLE';
+TABLE_NAME COLUMN_NAME ENCRYPTION_ALG SALT
+---------- ------------------------ ----------------------------- ---- 
+TDE_TABLE ID AES 192 bits key YES 
+TDE_TABLE DAY AES 192 bits key YES
+2 rows selected.
+
+
+# 기존 테이블에 암호화 된 컬럼 추가 
+SQL> alter table TDE_TABLE add ( PHONE number ENCRYPT no salt ); 
+Table 'TDE_TABLE' altered.
+
+SQL> select * from USER_ENCRYPTED_COLUMNS where table_name ='TDE_TABLE';
+TABLE_NAME COLUMN_NAME ENCRYPTION_ALG SALT
+---------- ------------------------ ----------------------------- ---- 
+TDE_TABLE ID AES 192 bits key YES 
+TDE_TABLE PHONE AES 192 bits key NO 
+TDE_TABLE DAY AES 192 bits key YES
+3 rows selected.
+
+
+# Index 생성에 대한 salt/no salt 변경 
+SQL> alter table TDE_TABLE modify ( ID ENCRYPT no salt); 
+Table 'TDE_TABLE' altered.
+
+SQL> select * from USER_ENCRYPTED_COLUMNS where table_name ='TDE_TABLE';
+TABLE_NAME COLUMN_NAME ENCRYPTION_ALG SALT
+---------- ------------------------ ----------------------------- ---- 
+TDE_TABLE ID AES 192 bits key NO 
+TDE_TABLE PHONE AES 192 bits key NO 
+TDE_TABLE DAY AES 192 bits key YES
+3 rows selected.
+
+
+# 암호화 알고리즘 변경 
+SQL> ALTER TABLE TDE_TABLE REKEY using '3DES168'; 
+Table 'TDE_TABLE' altered.
+
+SQL> select * from USER_ENCRYPTED_COLUMNS where table_name ='TDE_TABLE';
+TABLE_NAME COLUMN_NAME ENCRYPTION_ALG SALT
+---------- ------------------------ ----------------------------- ---- 
+TDE_TABLE ID 3 Key Triple DES 168 bits key NO 
+TDE_TABLE PHONE 3 Key Triple DES 168 bits key NO 
+TDE_TABLE DAY 3 Key Triple DES 168 bits key YES
+3 rows selected.
